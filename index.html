@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You Are My Favorite Person ✨</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ffffff;
+      border: 2px solid #ff4757;
+      color: #ff4757;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(238, 156, 167, 0.4);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      border: 2px solid #ffb6c1;
+      position: relative;
+    }
+
+    .badge {
+      background: #ff4757;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    h1 {
+      color: #2f3542;
+      font-size: 24px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #57606f;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    button.action-btn {
+      background-color: #ff4757;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+      margin-top: 15px;
+      transition: all 0.2s ease;
+    }
+
+    button.action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .note-box {
+      background: #fff5f6;
+      border: 2px dashed #ffb6c1;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 15px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .note-box:hover {
+      background: #ffe0e6;
+    }
+
+    .note-title {
+      font-weight: 700;
+      color: #ff4757;
+      font-size: 14px;
+    }
+
+    .note-content {
+      color: #2f3542;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4757;
+      font-size: 20px;
+      animation: float 4s linear infinite;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Play Song</button>
+
+  <div id="screen1" class="card">
+    <span class="badge">A Message For You 💌</span>
+    <h1>Hey Precious ❤️</h1>
+    <p>8 amazing years together, going onto Year 9... and I just wanted to remind you how much you mean to me.</p>
+    <button class="action-btn" onclick="startLetter()">Open My Note 🌸</button>
+  </div>
+
+  <div id="screen2" class="card hidden">
+    <span class="badge">WHY YOU'RE SPECIAL ✨</span>
+    <h1>Tap to Reveal 💕</h1>
+    
+    <div class="note-box" onclick="toggleReason(1)">
+      <div class="note-title">1. You're My Safe Haven 🏡</div>
+      <div id="reason1" class="note-content hidden">No matter how chaotic the world gets, being around you makes everything calm and right.</div>
+    </div>
+
+    <div class="note-box" onclick="toggleReason(2)">
+      <div class="note-title">2. You're My Missing Piece 🧩</div>
+      <div id="reason2" class="note-content hidden">Just like our song says—when I'm with you, everything feels complete.</div>
+    </div>
+
+    <div class="note-box" onclick="toggleReason(3)">
+      <div class="note-title">3. Year 9 & Beyond ♾️</div>
+      <div id="reason3" class="note-content hidden">8 years of memories down, a lifetime of loving you left to go.</div>
+    </div>
+
+    <button class="action-btn" onclick="goToScreen(3)">Read Final Note ➡️</button>
+  </div>
+
+  <div id="screen3" class="card hidden">
+    <span class="badge">ALWAYS & FOREVER 💖</span>
+    <h1>You Mean The World To Me</h1>
+    <p style="font-size: 16px; color: #2f3542; line-height: 1.7; margin-top: 15px;">
+      Thank you for being my strength, my favorite smile, and my best friend every single day. You are truly so precious to me!
+    </p>
+    <p style="color: #ff4757; font-weight: bold; font-size: 18px; margin-top: 20px;">
+      I Love You! ❤️
+    </p>
+  </div>
+
+  <script>
+    function createHearts() {
+      for(let i=0; i<12; i++) {
+        let heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '💖';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        heart.style.fontSize = (Math.random() * 12 + 14) + 'px';
+        document.body.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    function startLetter() {
+      music.play().then(() => {
+        musicBtn.innerText = "🔊 Mute Song";
+      }).catch((e) => {
+        console.log("Audio waiting for user interaction:", e);
+      });
+      goToScreen(2);
+    }
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicBtn.innerText = "🔊 Mute Song";
+      } else {
+        music.pause();
+        musicBtn.innerText = "🎵 Play Song";
+      }
+    }
+
+    function goToScreen(screenNum) {
+      document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+      document.getElementById(`screen${screenNum}`).classList.remove('hidden');
+    }
+
+    function toggleReason(num) {
+      const el = document.getElementById(`reason${num}`);
+      el.classList.toggle('hidden');
+    }
+  </script>
+</body>
+  </html>
+      
